@@ -22,19 +22,19 @@
                     background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b">
-                    <el-submenu :index="index+''" v-for="(item, index) in menuList" :key="item.id">
+                    <el-submenu :index="item.index+''" v-for="(item, index) in menuList" :key="item.id">
                       <template slot="title">
                         <i class="el-icon-location"></i>
                         <span>{{item.authName}}</span>
                       </template>
-                         <el-menu-item  v-for="(it, i) in item.children" :key="it.id" index="1-1">
+                         <el-menu-item  v-for="(it, i) in item.children" :key="it.id" index="'/'+it.path">
                            <i class="el-icon-menu"></i>{{it.authName}}
                           </el-menu-item>
                     </el-submenu>
                   </el-menu>
 
                 </el-aside>
-                <!-- 中间部分主体 -->
+                <!-- 中间部分主体 --> 
                 <el-main>
                   <!-- 嵌套路由匹配组件 -->
                   <router-view></router-view>
@@ -56,7 +56,7 @@ export default {
   created(){
       //在登录完成发送请求
       this.$axios.get("/menus").then(res=>{
-        console.log(res);
+        // console.log(res);
         this.menuList = res.data.data
         
       })

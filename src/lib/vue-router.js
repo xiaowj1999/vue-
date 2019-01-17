@@ -9,7 +9,8 @@ Vue.use(VueRouter)
 import login from '../components/01-login.vue'
 import index from '../components/02-index.vue'
 import user from "../components/04-user.vue"
-
+import role from "../components/05-roles.vue"
+import rights from '../components/06-rights.vue'
 //写规则
 let routes = [{
     path:"/login",
@@ -24,6 +25,12 @@ let routes = [{
     children:[{
         path:"users",
         component:user
+    },{
+        path:"roles",
+        component:role
+    },{
+        path:"rights",
+        component:rights
     }]
 }]
 
