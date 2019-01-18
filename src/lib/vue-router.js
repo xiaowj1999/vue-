@@ -11,6 +11,7 @@ import index from '../components/02-index.vue'
 import user from "../components/04-user.vue"
 import role from "../components/05-roles.vue"
 import rights from '../components/06-rights.vue'
+import goods from '../components/07-goods.vue'
 //写规则
 let routes = [{
     path:"/login",
@@ -31,12 +32,16 @@ let routes = [{
     },{
         path:"rights",
         component:rights
+    }
+    ,{
+        path:"goods",
+        component:goods
     }]
 }]
 
 //实例化路由对象
 let router = new VueRouter({
-    routes
+    routes  
 })
 
 
@@ -48,7 +53,7 @@ router.beforeEach((to,from,next)=>{
     
     
     //注意 next方法如果不执行 就不会跳转
-     next();
+    //  next();
     if(to.path ==="/login"){
         //登录页 不需要判断
         next()

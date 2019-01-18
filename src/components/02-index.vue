@@ -21,13 +21,15 @@
                     class="el-menu-vertical-demo"
                     background-color="#545c64"
                     text-color="#fff"
-                    active-text-color="#ffd04b">
-                    <el-submenu :index="item.index+''" v-for="(item, index) in menuList" :key="item.id">
+                    active-text-color="#ffd04b"
+                    router
+                    >
+                    <el-submenu :index="item.order+''" v-for="(item, index) in menuList" :key="item.id">
                       <template slot="title">
                         <i class="el-icon-location"></i>
                         <span>{{item.authName}}</span>
                       </template>
-                         <el-menu-item  v-for="(it, i) in item.children" :key="it.id" index="'/'+it.path">
+                         <el-menu-item  v-for="(it, num) in item.children" :key="it.id" :index="'/'+it.path">
                            <i class="el-icon-menu"></i>{{it.authName}}
                           </el-menu-item>
                     </el-submenu>

@@ -22,6 +22,15 @@ import mybreadCrumb from "./components/03-mybreadCrumb.vue";
 Vue.component("mybreadCrumb",mybreadCrumb)
 
 
+//导入时间轴插件
+import momont from 'moment'
+//全局时间转换 使用filter
+Vue.filter("modelTime",(value)=>{
+    // console.log(value);
+    return momont(value).format("YYYY-MM-DD HH:mm:ss")
+})
+
+
 Vue.config.productionTip = false
 
 new Vue({

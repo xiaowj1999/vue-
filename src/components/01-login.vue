@@ -78,6 +78,7 @@ export default{
     display:flex;
     justify-content:center;
     align-items:center;
+    
 
     .login-content{
       background-color:#ffffff;
