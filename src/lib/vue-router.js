@@ -12,12 +12,16 @@ import user from "../components/04-user.vue"
 import role from "../components/05-roles.vue"
 import rights from '../components/06-rights.vue'
 import goods from '../components/07-goods.vue'
+import params from '../components/08-params.vue'
+import reports from '../components/10-reports.vue'
+import categories from '../components/09-category.vue'
+import orders from '../components/11-orders.vue'
 //写规则
 let routes = [{
     path:"/login",
     component:login
 },{
-    path:"/",
+    path:"/",           
     redirect:"/users"
 },
 {
@@ -36,6 +40,18 @@ let routes = [{
     ,{
         path:"goods",
         component:goods
+    },{
+        path:"params",
+        component:params
+    },{
+        path:"reports",
+        component:reports
+    },{
+        path:"categories",
+        component:categories
+    },{
+        path:"orders",
+        component:orders
     }]
 }]
 

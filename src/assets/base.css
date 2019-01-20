@@ -8,3 +8,15 @@ html,body {
 .user-container .bg-purple-header {
     background: #d3dce6;
   }
+.mt {
+    margin-top: 10px;
+}
+.mr {
+    margin-right: 10px;
+}
+.ml {
+    margin-left: 10px;
+}
+.mb {
+    margin-bottom: 10px;
+}

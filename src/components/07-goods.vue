@@ -114,7 +114,7 @@ export default  {
             });
     },
     currentChange(pagenum){
-          console.log(pagenum);
+        //   console.log(pagenum);
           
           //点击时获取到的页码数
           this.goodPage.pagenum= pagenum
