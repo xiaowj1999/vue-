@@ -50,8 +50,8 @@
           </el-table-column>
           <el-table-column prop="operate" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" plain size="small"></el-button>
-              <el-button type="danger" icon="el-icon-delete" plain size="small"></el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="roleEdit(scope.row)" plain size="small"></el-button>
+              <el-button type="danger" icon="el-icon-delete" @click="delOne(scope.row)" plain size="small"></el-button>
               <el-button type="warning" icon="el-icon-check" plain size="small"></el-button>
             </template>
           </el-table-column>
@@ -73,6 +73,21 @@
         <el-button type="primary" @click="submitForm('userRole')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 角色编辑对话框 -->
+        <el-dialog title="编辑角色" :visible.sync="editvisible">
+            <el-form :model="editRole" label-position="right" label-width="100px" :rules="rules" ref="editRole">
+                <el-form-item label="角色名称" prop="roleName">
+                    <el-input v-model="editRole.roleName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="角色描述" prop="roleDesc">
+                    <el-input v-model="editRole.roleDesc" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="editvisible = false">取 消</el-button>
+                <el-button type="primary" @click="submitEditRole('editRole')">确 定</el-button>
+            </div>
+        </el-dialog>
   </div>
 
 </template>
@@ -100,16 +115,20 @@ export default {
       roleForm: {
         roleName: "",
         roleDesc: ""
-      }
+      },
+      //角色编辑数据
+      editvisible:false,
+      editRole: {}
     };
   },
   methods: {
     async getRoles() {
       //发送请求
       let res = await this.$axios.get("roles");
-      console.log(res);
+      // console.log(res);
       this.roleList = res.data.data;
     },
+    //添加角色
     submitForm(formName) {
       //获取表单元素 并且验证
       this.$refs[formName].validate(async valid => {
@@ -117,12 +136,62 @@ export default {
           //验证成功
           //接受数据 发送请求
           let res = await this.$axios.post("roles", this.roleForm);
-          console.log(res);
+          // console.log(res);
           if (res.data.meta.status === 201) {
             //如果添加成功 点击确认弹框小时
             this.addvisible = false;
             //同时在调用数据、
             this.getRoles();
+          }
+        } else {
+          this.$message.error("请确认数据是否输入正确");
+          return false;
+        }
+      });
+    },
+    //删除角色用户
+    delOne(data) {
+      // console.log(data);
+      
+      //提示用户 同时调用接口发送请求
+      this.$confirm("此操作将永久删除该用户信息, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          let res = await this.$axios.delete(`roles/${data.id}`);
+          //重新获取信息
+          this.getRoles();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    //编辑角色用户,显示编辑框
+    roleEdit(data){
+      console.log(data);
+      
+      this.editvisible= true;
+      this.editRole=data
+    },
+    //点击确认 提交数据
+    submitEditRole(formName){
+       //获取表单元素 并且验证
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          //验证成功
+          //接受数据 发送请求
+          let res = await this.$axios.put(`roles/${this.editRole.id}`, this.editRole);
+          console.log(res);
+          if (res.data.meta.status === 200) {
+            //如果添加成功 点击确认弹框小时
+            this.editvisible = false;
+            //同时在调用数据、
+            this.getRoles();  
           }
         } else {
           this.$message.error("请确认数据是否输入正确");
