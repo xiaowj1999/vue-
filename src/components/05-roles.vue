@@ -10,6 +10,11 @@
     </el-row>
     <el-row>
       <el-col :span="24">
+        <el-button @click="addvisible=true">添加角色</el-button>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="24">
         <el-table :data="roleList" border style="width: 100%">
           <el-table-column width="60" type="expand">
             <template slot-scope="props">
@@ -53,6 +58,21 @@
         </el-table>
       </el-col>
     </el-row>
+    <!-- 添加角色对话框 -->
+    <el-dialog title="添加角色" :visible.sync="addvisible">
+      <el-form :model="roleForm" label-position="right" label-width="100px" :rules="rules" ref="userRole">
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input v-model="roleForm.roleName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" prop="roleDesc">
+          <el-input v-model="roleForm.roleDesc" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addvisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('userRole')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
@@ -62,14 +82,57 @@ export default {
     return {
       level2: "权限管理",
       level3: "角色列表",
-      roleList: []
+      roleList: [],
+      //添加用户角色
+      addvisible: false,
+      //验证表单规则
+      rules: {
+        roleName: [
+          { required: true, message: "请输入角色名称", trigger: "blur" },
+          { min: 3, max: 32, message: "数据不能为空", trigger: "blur" }
+        ],
+        roleDesc: [
+          { required: true, message: "请输入角色描述", trigger: "change" },
+          { min: 3, max: 32, message: "数据不能为空", trigger: "blur" }
+        ]
+      },
+      //提交表单数据
+      roleForm: {
+        roleName: "",
+        roleDesc: ""
+      }
     };
   },
+  methods: {
+    async getRoles() {
+      //发送请求
+      let res = await this.$axios.get("roles");
+      console.log(res);
+      this.roleList = res.data.data;
+    },
+    submitForm(formName) {
+      //获取表单元素 并且验证
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          //验证成功
+          //接受数据 发送请求
+          let res = await this.$axios.post("roles", this.roleForm);
+          console.log(res);
+          if (res.data.meta.status === 201) {
+            //如果添加成功 点击确认弹框小时
+            this.addvisible = false;
+            //同时在调用数据、
+            this.getRoles();
+          }
+        } else {
+          this.$message.error("请确认数据是否输入正确");
+          return false;
+        }
+      });
+    }
+  },
   async created() {
-    //发送请求
-    let res = await this.$axios.get("roles");
-    console.log(res);
-    this.roleList = res.data.data;
+    this.getRoles()
   }
 };
 </script>
